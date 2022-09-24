@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+spec:
+  destination:
+    name: in-cluster
+    namespace: cert-manager
+  source:
+    helm:
+      releaseName: cert-manager
+      valueFiles:
+        - values.yaml
+    path: cert-manager
+    repoURL: git@github.com:borg-land/k8s-demo.git
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
