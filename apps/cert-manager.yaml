@@ -12,7 +12,7 @@ spec:
       valueFiles:
         - values.yaml
     path: cert-manager
-    repoURL: git@github.com:borg-land/k8s-demo.git
+    repoURL: https://github.com/borg-land/k8s-demo
   project: default
   syncPolicy:
     automated:

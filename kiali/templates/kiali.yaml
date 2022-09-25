@@ -1,0 +1,33 @@
+apiVersion: kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+  namespace: kiali
+  annotations:
+    ansible.operator-sdk/verbosity: "1"
+spec:
+  istio_namespace: istio-system
+  istio_labels:
+    app_label_name: app.kubernetes.io/name
+    version_label_name: app.kubernetes.io/version
+  deployment:
+    namespace: kiali
+    ingress_enabled: false
+    verbose_mode: "4"
+    accessible_namespaces:
+      - '**'
+    pod_annotations:
+      sidecar.istio.io/inject: "true"
+  auth:
+    strategy: anonymous
+  external_services:
+    grafana:
+      url: https://grafana.m.rack.gold
+    #   in_cluster_url: 'http://monitoring-grafana.monitoring'
+    # prometheus:
+    #   url: https://prometheus.m.rack.gold
+    #   in_cluster_url: 'http://monitoring-thanos-query-http.monitoring:10902'
+    # tracing:
+    #   in_cluster_url: 'http://tracing-jaeger-query.tracing/jaeger'
+    #   use_grpc: false    
+---

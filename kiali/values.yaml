@@ -1,0 +1,4 @@
+kiali-operator:
+  cr:
+    create: false
+    namespace: istio-system

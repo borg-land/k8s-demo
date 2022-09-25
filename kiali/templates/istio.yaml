@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  labels:
+    app: kiali
+  name: kiali
+  namespace: kiali
+spec:
+  hosts:
+    - kiali.m.rack.gold
+  gateways:
+  - istio-system/upo-prod
+  http:
+  - route:
+    - destination:
+        host: kiali
+        port:
+          number: 20001
