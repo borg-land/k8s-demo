@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-mesh
+spec:
+  destination:
+    name: in-cluster
+    namespace: istio-system
+  source:
+    path: istio-networking
+    repoURL: https://github.com/borg-land/k8s-demo
+    targetRevision: dev
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
