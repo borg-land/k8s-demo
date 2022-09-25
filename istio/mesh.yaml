@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+---
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: controlplane
+  namespace: istio-system
+spec:
+  components:
+    cni:
+      enabled: true
+    ingressGateways:
+      - enabled: true
+        k8s:
+          service:
+            externalTrafficPolicy: Local
+            ports:
+              - name: status-port
+                port: 15021
+                protocol: TCP
+                targetPort: 15021
+              - name: http2
+                port: 80
+                protocol: TCP
+                targetPort: 8080
+              - name: https
+                port: 443
+                protocol: TCP
+                targetPort: 8443
+              - name: tcp-istiod
+                port: 15012
+                protocol: TCP
+                targetPort: 15012
+              - name: tls
+                port: 15443
+                protocol: TCP
+                targetPort: 15443
+              - name: mqtt
+                port: 1883
+                protocol: TCP
+              - name: syslog
+                port: 1514
+                protocol: TCP
+        name: istio-ingressgateway
+      - enabled: true
+        k8s:
+          service:
+            ports:
+              - name: status-port
+                port: 15020
+              - name: http2
+                port: 80
+                targetPort: 8080
+              - name: https
+                port: 443
+                targetPort: 8443
+            type: ClusterIP
+        label:
+          app: cluster-local-gateway
+          istio: cluster-local-gateway
+        name: cluster-local-gateway
+      - enabled: true
+        k8s:
+          env:
+            - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+              value: network1
+          service:
+            ports:
+              - name: status-port
+                port: 15021
+                targetPort: 15021
+              - name: tls
+                port: 15443
+                targetPort: 15443
+              - name: tls-istiod
+                port: 15012
+                targetPort: 15012
+              - name: tls-webhook
+                port: 15017
+                targetPort: 15017
+        label:
+          istio: eastwestgateway
+          app: istio-eastwestgateway
+          topology.istio.io/network: network1
+        name: istio-eastwestgateway
+    pilot:
+      k8s:
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+  hub: gcr.io/istio-release
+  meshConfig:
+    accessLogFile: /dev/stdout
+    enablePrometheusMerge: true
+    protocolDetectionTimeout: 5s
+    outboundTrafficPolicy: 
+      mode: ALLOW_ANY
+    enableTracing: true
+    defaultConfig:
+      gatewayTopology:
+        numTrustedProxies: 2  
+  namespace: istio-system
+  profile: default
+  tag: 1.15.0
+  values:
+    global:
+      meshID: lab
+      multiCluster:
+        clusterName: prod
+      network: network1
+    pilot:
+      env:
+        ENABLE_LEGACY_FSGROUP_INJECTION: false
+    telemetry:
+      enabled: true
+      v2:
+        prometheus:
+          enabled: true
+          wasmEnabled: false
+    cni:
+      cniBinDir: /home/kubernetes/bin
+      enabled: true
+      resourceQuotas:
+        enabled: true
