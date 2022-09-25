@@ -4,3 +4,6 @@ cert-manager:
     name: cert-manager
     annotations:
       iam.gke.io/gcp-service-account: cert-manager@coen-mahamed-ali.iam.gserviceaccount.com
+  startupapicheck:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
