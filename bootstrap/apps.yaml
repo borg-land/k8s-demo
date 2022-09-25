@@ -1,21 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: apps
+  namespace: argocd
 spec:
   destination:
-    name: in-cluster
-    namespace: cert-manager
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
   source:
-    helm:
-      releaseName: cert-manager
-      valueFiles:
-        - values.yaml
-    path: cert-manager
+    path: apps
     repoURL: https://github.com/borg-land/k8s-demo
     targetRevision: dev
-  project: default
   syncPolicy:
     automated:
-      prune: true
+      prune: false
       selfHeal: true
