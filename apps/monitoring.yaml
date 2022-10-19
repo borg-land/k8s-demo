@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring
+spec:
+  destination:
+    name: in-cluster
+    namespace: monitoring
+  source:
+    helm:
+      releaseName: monitoring
+      valueFiles:
+        - values.yaml
+    path: monitoring
+    repoURL: https://github.com/borg-land/k8s-demo
+    targetRevision: dev
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
