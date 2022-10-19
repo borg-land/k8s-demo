@@ -8,6 +8,21 @@ grafana:
    requests:
      cpu: 500m
      memory: 1024Mi
+  env:
+    AWS_ROLE_ARN: arn:aws:iam::760591208458:role/gke-to-aws
+    AWS_WEB_IDENTITY_TOKEN_FILE: /var/run/secrets/aws-iam-token/serviceaccount/token
+    AWS_REGION: eu-central-1
+  extraSecretMounts:
+    - name: aws-iam-token
+      readOnly: true
+      mountPath: /var/run/secrets/aws-iam-token/serviceaccount
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            audience: sts.amazonaws.com
+            expirationSeconds: 86400
+            path: token
   sidecar:
     dashboards:
       enabled: true
