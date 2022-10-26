@@ -256,3 +256,7 @@ mimir-distributed:
       requests:
         cpu: 1
         memory: 512Mi
+
+  smoke_test:
+    annotations:
+      sidecar.istio.io/inject: "false"
