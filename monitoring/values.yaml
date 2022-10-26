@@ -94,6 +94,7 @@ mimir-distributed:
     replicas: 2
     resources:
       limits:
+        cpu: 2
         memory: 1.4Gi
       requests:
         cpu: 1
@@ -106,6 +107,7 @@ mimir-distributed:
       size: 20Gi
     resources:
       limits:
+        cpu: 2
         memory: 2.1Gi
       requests:
         cpu: 1
@@ -115,6 +117,7 @@ mimir-distributed:
     replicas: 2
     resources:
       limits:
+        cpu: 4
         memory: 5.7Gi
       requests:
         cpu: 2
@@ -126,6 +129,7 @@ mimir-distributed:
     replicas: 3
     resources:
       limits:
+        cpu: 4
         memory: 12Gi
       requests:
         cpu: 3.5
