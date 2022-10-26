@@ -175,6 +175,7 @@ mimir-distributed:
     replicas: 1
     resources:
       limits:
+        cpu: 500m
         memory: 128Mi
       requests:
         cpu: 100m
@@ -184,6 +185,7 @@ mimir-distributed:
     replicas: 1
     resources:
       limits:
+        cpu: 4
         memory: 5.6Gi
       requests:
         cpu: 2
@@ -193,6 +195,7 @@ mimir-distributed:
     replicas: 1
     resources:
       limits:
+        cpu: 4
         memory: 2.8Gi
       requests:
         cpu: 2
@@ -202,6 +205,7 @@ mimir-distributed:
     replicas: 1
     resources:
       limits:
+        cpu: 2
         memory: 2.8Gi
       requests:
         cpu: 1
@@ -213,6 +217,7 @@ mimir-distributed:
     replicas: 3
     resources:
       limits:
+        cpu: 2
         memory: 2.1Gi
       requests:
         cpu: 1
@@ -243,6 +248,7 @@ mimir-distributed:
     replicas: 1
     resources:
       limits:
+        cpu: 2
         memory: 731Mi
       requests:
         cpu: 1
@@ -252,6 +258,7 @@ mimir-distributed:
     replicas: 1
     resources:
       limits:
+        cpu: 2
         memory: 731Mi
       requests:
         cpu: 1
