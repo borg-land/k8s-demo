@@ -7,7 +7,7 @@ grafana:
      cpu: 500m
      memory: 1024Mi
   env:
-    AWS_ROLE_ARN: arn:aws:iam::760591208458:role/gke-to-aws
+    AWS_ROLE_ARN: arn:aws:iam::691556712356:role/gke-grafana
     AWS_WEB_IDENTITY_TOKEN_FILE: /var/run/secrets/aws-iam-token/serviceaccount/token
     AWS_REGION: eu-central-1
     AWS_ROLE_SESSION_NAME: grafana
@@ -74,182 +74,185 @@ grafana:
       api_url: https://api.github.com/user
       # role_attribute_path: contains(groups[*], '@knative/productivity-wg-leads') && 'Admin' || contains(groups[*], '@knative/productivity-writers') && 'Editor' || 'Viewer'
 
-# mimir-distributed:
-  # alertmanager:
-  #   persistentVolume:
-  #     enabled: true
-  #   replicas: 2
-  #   resources:
-  #     limits:
-  #       memory: 1.4Gi
-  #     requests:
-  #       cpu: 1
-  #       memory: 1Gi
-  #   statefulSet:
-  #     enabled: true
+mimir-distributed:
+  enabled: true
+  mimir:
+    structuredConfig:
+      blocks_storage:
+        backend: gcs
+        gcs:
+          bucket_name: coen-thanos
+  serviceAccount:
+    create: true
+    name: mimir
+    annotations:
+      iam.gke.io/gcp-service-account: thanos@coen-mahamed-ali.iam.gserviceaccount.com
 
-  # compactor:
-  #   persistentVolume:
-  #     size: 20Gi
-  #   resources:
-  #     limits:
-  #       memory: 2.1Gi
-  #     requests:
-  #       cpu: 1
-  #       memory: 1.5Gi
+  alertmanager:
+    persistentVolume:
+      enabled: true
+    replicas: 2
+    resources:
+      limits:
+        memory: 1.4Gi
+      requests:
+        cpu: 1
+        memory: 1Gi
+    statefulSet:
+      enabled: true
 
-  # distributor:
-  #   replicas: 2
-  #   resources:
-  #     limits:
-  #       memory: 5.7Gi
-  #     requests:
-  #       cpu: 2
-  #       memory: 4Gi
+  compactor:
+    persistentVolume:
+      size: 20Gi
+    resources:
+      limits:
+        memory: 2.1Gi
+      requests:
+        cpu: 1
+        memory: 1.5Gi
 
-  # ingester:
-  #   persistentVolume:
-  #     size: 50Gi
-  #   replicas: 3
-  #   resources:
-  #     limits:
-  #       memory: 12Gi
-  #     requests:
-  #       cpu: 3.5
-  #       memory: 8Gi
-  #   topologySpreadConstraints: {}
-  #   affinity:
-  #     podAntiAffinity:
-  #       requiredDuringSchedulingIgnoredDuringExecution:
-  #         - labelSelector:
-  #             matchExpressions:
-  #               - key: target # support for enterprise.legacyLabels
-  #                 operator: In
-  #                 values:
-  #                   - ingester
-  #           topologyKey: 'kubernetes.io/hostname'
+  distributor:
+    replicas: 2
+    resources:
+      limits:
+        memory: 5.7Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
 
-  #         - labelSelector:
-  #             matchExpressions:
-  #               - key: app.kubernetes.io/component
-  #                 operator: In
-  #                 values:
-  #                   - ingester
-  #           topologyKey: 'kubernetes.io/hostname'
+  ingester:
+    persistentVolume:
+      size: 50Gi
+    replicas: 3
+    resources:
+      limits:
+        memory: 12Gi
+      requests:
+        cpu: 3.5
+        memory: 8Gi
+    topologySpreadConstraints: {}
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: target # support for enterprise.legacyLabels
+                  operator: In
+                  values:
+                    - ingester
+            topologyKey: 'kubernetes.io/hostname'
 
-  #   zoneAwareReplication:
-  #     topologyKey: 'kubernetes.io/hostname'
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - ingester
+            topologyKey: 'kubernetes.io/hostname'
 
-  # chunks-cache:
-  #   enabled: true
-  #   replicas: 2
+    zoneAwareReplication:
+      topologyKey: 'kubernetes.io/hostname'
 
-  # index-cache:
-  #   enabled: true
-  #   replicas: 3
+  chunks-cache:
+    enabled: true
+    replicas: 2
 
-  # metadata-cache:
-  #   enabled: true
+  index-cache:
+    enabled: true
+    replicas: 3
 
-  # results-cache:
-  #   enabled: true
-  #   replicas: 2
+  metadata-cache:
+    enabled: true
 
-  # minio:
-  #   enabled: false
+  results-cache:
+    enabled: true
+    replicas: 2
 
-  # overrides_exporter:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 128Mi
-  #     requests:
-  #       cpu: 100m
-  #       memory: 128Mi
+  minio:
+    enabled: false
 
-  # querier:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 5.6Gi
-  #     requests:
-  #       cpu: 2
-  #       memory: 4Gi
+  overrides_exporter:
+    replicas: 1
+    resources:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
-  # query_frontend:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 2.8Gi
-  #     requests:
-  #       cpu: 2
-  #       memory: 2Gi
+  querier:
+    replicas: 1
+    resources:
+      limits:
+        memory: 5.6Gi
+      requests:
+        cpu: 2
+        memory: 4Gi
 
-  # ruler:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 2.8Gi
-  #     requests:
-  #       cpu: 1
-  #       memory: 2Gi
+  query_frontend:
+    replicas: 1
+    resources:
+      limits:
+        memory: 2.8Gi
+      requests:
+        cpu: 2
+        memory: 2Gi
 
-  # store_gateway:
-  #   persistentVolume:
-  #     size: 10Gi
-  #   replicas: 3
-  #   resources:
-  #     limits:
-  #       memory: 2.1Gi
-  #     requests:
-  #       cpu: 1
-  #       memory: 1.5Gi
-  #   topologySpreadConstraints: {}
-  #   affinity:
-  #     podAntiAffinity:
-  #       requiredDuringSchedulingIgnoredDuringExecution:
-  #         - labelSelector:
-  #             matchExpressions:
-  #               - key: target # support for enterprise.legacyLabels
-  #                 operator: In
-  #                 values:
-  #                   - store-gateway
-  #           topologyKey: 'kubernetes.io/hostname'
+  ruler:
+    replicas: 1
+    resources:
+      limits:
+        memory: 2.8Gi
+      requests:
+        cpu: 1
+        memory: 2Gi
 
-  #         - labelSelector:
-  #             matchExpressions:
-  #               - key: app.kubernetes.io/component
-  #                 operator: In
-  #                 values:
-  #                   - store-gateway
-  #           topologyKey: 'kubernetes.io/hostname'
-  #   zoneAwareReplication:
-  #     topologyKey: 'kubernetes.io/hostname'
+  store_gateway:
+    persistentVolume:
+      size: 10Gi
+    replicas: 3
+    resources:
+      limits:
+        memory: 2.1Gi
+      requests:
+        cpu: 1
+        memory: 1.5Gi
+    topologySpreadConstraints: {}
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: target # support for enterprise.legacyLabels
+                  operator: In
+                  values:
+                    - store-gateway
+            topologyKey: 'kubernetes.io/hostname'
 
-  # nginx:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 731Mi
-  #     requests:
-  #       cpu: 1
-  #       memory: 512Mi
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - store-gateway
+            topologyKey: 'kubernetes.io/hostname'
+    zoneAwareReplication:
+      topologyKey: 'kubernetes.io/hostname'
 
-  # # Grafana Enterprise Metrics feature related
-  # admin_api:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 128Mi
-  #     requests:
-  #       cpu: 100m
-  #       memory: 64Mi
+  nginx:
+    replicas: 1
+    resources:
+      limits:
+        memory: 731Mi
+      requests:
+        cpu: 1
+        memory: 512Mi
 
-  # gateway:
-  #   replicas: 1
-  #   resources:
-  #     limits:
-  #       memory: 731Mi
-  #     requests:
-  #       cpu: 1
-  #       memory: 512Mi
+  gateway:
+    replicas: 1
+    resources:
+      limits:
+        memory: 731Mi
+      requests:
+        cpu: 1
+        memory: 512Mi
