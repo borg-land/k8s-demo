@@ -12,6 +12,7 @@ grafana:
     AWS_ROLE_ARN: arn:aws:iam::760591208458:role/gke-to-aws
     AWS_WEB_IDENTITY_TOKEN_FILE: /var/run/secrets/aws-iam-token/serviceaccount/token
     AWS_REGION: eu-central-1
+    AWS_ROLE_SESSION_NAME: grafana
   extraSecretMounts:
     - name: aws-iam-token
       readOnly: true
@@ -53,6 +54,8 @@ grafana:
     - grafana-worldmap-panel
     - grafana-piechart-panel
     - grafana-polystat-panel
+    - grafana-x-ray-datasource
+    - grafana-athena-datasource
   # extraSecretMounts:
   #   - name: grafana-oauth
   #     secretName: grafana-oauth
