@@ -82,7 +82,7 @@ mimir-distributed:
         backend: gcs
         gcs:
           bucket_name: coen-thanos
-        buckets_store:
+        bucket_store:
           chunks_cache:
             backend: memcached
             memcached:
