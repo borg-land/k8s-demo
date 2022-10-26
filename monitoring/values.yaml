@@ -148,10 +148,10 @@ mimir-distributed:
     resources:
       limits:
         cpu: 4
-        memory: 12Gi
-      requests:
-        cpu: 3.5
         memory: 8Gi
+      requests:
+        cpu: 2.5
+        memory: 5Gi
     topologySpreadConstraints: {}
     affinity:
       podAntiAffinity:
