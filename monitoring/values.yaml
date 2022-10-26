@@ -82,6 +82,24 @@ mimir-distributed:
         backend: gcs
         gcs:
           bucket_name: coen-thanos
+        buckets_store:
+          chunks_cache:
+            backend: memcached
+            memcached:
+              addresses: 10.104.128.67:11211
+              max_item_size: 1048576
+              timeout: 450ms
+          index_cache:
+            backend: memcached
+            memcached:
+              addresses: 10.104.128.67:11211
+              max_item_size: 15728640
+          metadata_cache:
+            backend: memcached
+            memcached:
+              addresses: 10.104.128.67:11211
+              max_item_size: 1048576
+
   serviceAccount:
     create: true
     name: mimir
@@ -156,21 +174,6 @@ mimir-distributed:
 
     zoneAwareReplication:
       topologyKey: 'kubernetes.io/hostname'
-
-  chunks-cache:
-    enabled: true
-    replicas: 2
-
-  index-cache:
-    enabled: true
-    replicas: 3
-
-  metadata-cache:
-    enabled: true
-
-  results-cache:
-    enabled: true
-    replicas: 2
 
   minio:
     enabled: false
