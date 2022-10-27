@@ -76,7 +76,7 @@ grafana:
 
 kube-prometheus-stack:
   # helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -f helm/prom-operator.yaml -n monitoring
-  manageCrds: false
+  manageCrds: true
   alertmanager:
     alertmanagerSpec:
       portName: http-web
