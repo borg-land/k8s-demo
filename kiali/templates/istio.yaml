@@ -9,7 +9,7 @@ spec:
   hosts:
     - kiali.m.rack.gold
   gateways:
-  - istio-system/upo-prod
+  - istio-system/rack-gold
   http:
   - route:
     - destination:

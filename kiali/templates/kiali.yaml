@@ -22,11 +22,9 @@ spec:
     strategy: anonymous
   external_services:
     grafana:
-      url: https://grafana.m.rack.gold
-      in_cluster_url: 'http://monitoring-grafana.monitoring'
-    # prometheus:
-    #   url: https://prometheus.m.rack.gold
-    #   in_cluster_url: 'http://monitoring-thanos-query-http.monitoring:10902'
+      url: 'http://monitoring-grafana.monitoring'
+    prometheus:
+      url: 'http://monitoring-mimir-nginx.monitoring:80'
     # tracing:
     #   in_cluster_url: 'http://tracing-jaeger-query.tracing/jaeger'
     #   use_grpc: false    
