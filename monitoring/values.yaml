@@ -74,6 +74,68 @@ grafana:
       api_url: https://api.github.com/user
       # role_attribute_path: contains(groups[*], '@knative/productivity-wg-leads') && 'Admin' || contains(groups[*], '@knative/productivity-writers') && 'Editor' || 'Viewer'
 
+kube-prometheus-stack:
+  # helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -f helm/prom-operator.yaml -n monitoring
+  manageCrds: false
+  alertmanager:
+    alertmanagerSpec:
+      portName: http-web
+      externalUrl: https://alertmanager.m.rack.gold
+  prometheus:
+    prometheusSpec:
+      externalUrl: https://prometheus.m.rack.gold
+      podMetadata:
+        annotations: 
+          proxy.istio.io/config: |
+            proxyMetadata:
+              OUTPUT_CERTS: /etc/istio-certs
+          sidecar.istio.io/userVolume: '[{"name": "istio-certs", "emptyDir": {"medium": "Memory"}}]'
+          sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-certs"}]'
+      volumeMounts:
+        - mountPath: /etc/prom-certs/
+          name: istio-certs
+      volumes:
+        - emptyDir:
+            medium: Memory
+          name: istio-certs
+      resources:
+        requests:
+          memory: "2000Mi"
+          cpu: "2000m"
+        limits:
+          memory: "7096Mi"
+          cpu: "4000m"
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      ruleSelectorNilUsesHelmValues: false
+      probeSelectorNilUsesHelmValues: false
+      remoteWrite:
+        - url: http://monitoring-mimir-nginx.monitoring.svc.cluster.local:80/api/v1/push
+      portName: http-web
+      externalLabels: 
+        cluster: prod
+  prometheusOperator:
+    admissionWebhooks:
+      enabled: false
+      patch:
+        enabled: true
+        podAnnotations:
+          sidecar.istio.io/inject: "false"
+    tls:
+      enabled: false 
+  grafana:
+    enabled: false
+  prometheus-node-exporter:
+    hostNetwork: false
+  coreDns:
+    enabled: false
+  kube-state-metrics:
+    # metricLabelsAllowlist:
+    #   - pods=[*]
+    #   - deployments=[app.kubernetes.io/name,app.kubernetes.io/component,app.kubernetes.io/instance]
+    selfMonitor:
+      enabled: true
+
 mimir-distributed:
   enabled: true
   mimir:
