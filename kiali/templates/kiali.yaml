@@ -24,7 +24,7 @@ spec:
     grafana:
       url: 'http://monitoring-grafana.monitoring'
     prometheus:
-      url: 'http://monitoring-mimir-nginx.monitoring:80'
+      url: 'http://monitoring-mimir-nginx.monitoring:80/prometheus'
     # tracing:
     #   in_cluster_url: 'http://tracing-jaeger-query.tracing/jaeger'
     #   use_grpc: false    
