@@ -7,7 +7,7 @@ We use argocd to sync cluster state with the configuration specified in knative/
 1. Install the CNI
 
 ```
-helm install cilium cilium/cilium --version 1.12.1 \
+helm upgrade --install cilium cilium/cilium --version 1.12.3 \
   --namespace kube-system \
   --set nodeinit.enabled=true \
   --set nodeinit.reconfigureKubelet=true \
@@ -17,7 +17,8 @@ helm install cilium cilium/cilium --version 1.12.1 \
   --set ipam.mode=kubernetes \
   --set hubble.relay.enabled=true \
   --set hubble.ui.enabled=true \
-  --set ipv4NativeRoutingCIDR=10.201.64.0/18
+  --set ipv4NativeRoutingCIDR=10.201.64.0/18 \
+  --set agentNotReadyTaintKey=ignore-taint.cluster-autoscaler.kubernetes.io/cilium-agent-not-ready
 ```
 
 1. Install Istio
