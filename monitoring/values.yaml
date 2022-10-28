@@ -38,6 +38,8 @@ grafana:
   persistence:
     enabled: true
     size: 50Gi
+  serviceMonitor:
+    enabled: true
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -167,7 +169,9 @@ mimir-distributed:
     name: mimir
     annotations:
       iam.gke.io/gcp-service-account: thanos@coen-mahamed-ali.iam.gserviceaccount.com
-
+  metaMonitoring:
+    serviceMonitor:
+      enabled: true
   alertmanager:
     persistentVolume:
       enabled: true
