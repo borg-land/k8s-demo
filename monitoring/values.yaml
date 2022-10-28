@@ -276,6 +276,14 @@ mimir-distributed:
     nginxConfig:
       httpSnippet: |
         proxy_http_version 1.1;
+      serverSnippet: |
+        location /api/v1/status/config {
+          return 200 '{"status": "success"}';
+        }
+        location /api/v1/status/flags {
+          return 200 '{"status": "success"}';
+        }
+
     replicas: 1
     resources:
       limits:
