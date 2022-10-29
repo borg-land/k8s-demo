@@ -58,6 +58,28 @@ kube-prometheus-stack:
       - grafana-polystat-panel
       - grafana-x-ray-datasource
       - grafana-athena-datasource
+    dashboards: 
+      default:
+        mimir-config:
+          url: https://github.com/grafana/mimir/blob/main/operations/mimir-mixin-compiled/dashboards/mimir-config.json
+        thanos-query:
+          url: https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/query.json
+        thanos-store:
+          url: https://raw.githubusercontent.com/thanos-io/thanos/master/examples/dashboards/store.json
+        nginx-ingress:
+          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+        istio-control-plane:
+          gnetId: 7645
+          revision: 139
+        istio-mesh:
+          gnetId: 7639
+          revision: 139
+        istio-service: 
+          gnetId: 7636
+          revision: 139
+        istio-workload:
+          gnetId: 7630
+          revision: 139       
     grafana.ini:
       feature_toggles:
         publicDashboards: "true"
