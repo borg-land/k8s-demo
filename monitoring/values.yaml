@@ -57,21 +57,7 @@ kube-prometheus-stack:
       - grafana-piechart-panel
       - grafana-polystat-panel
       - grafana-x-ray-datasource
-      - grafana-athena-datasource
-    dashboards: 
-      default:
-        istio-control-plane:
-          gnetId: 7645
-          revision: 139
-        istio-mesh:
-          gnetId: 7639
-          revision: 139
-        istio-service: 
-          gnetId: 7636
-          revision: 139
-        istio-workload:
-          gnetId: 7630
-          revision: 139       
+      - grafana-athena-datasource   
     grafana.ini:
       feature_toggles:
         publicDashboards: "true"
