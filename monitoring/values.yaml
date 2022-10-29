@@ -224,7 +224,7 @@ mimir-distributed:
     topologySpreadConstraints: {}
 
   minio:
-    enabled: true
+    enabled: false
 
   overrides_exporter:
     replicas: 1
