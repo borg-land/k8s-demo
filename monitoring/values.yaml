@@ -1,83 +1,76 @@
-grafana:
-  resources:
-   limits:
-     cpu: 4000m
-     memory: 2048Mi
-   requests:
-     cpu: 500m
-     memory: 1024Mi
-  env:
-    AWS_ROLE_ARN: arn:aws:iam::691556712356:role/gke-grafana
-    AWS_WEB_IDENTITY_TOKEN_FILE: /var/run/secrets/aws-iam-token/serviceaccount/token
-    AWS_REGION: eu-central-1
-    AWS_ROLE_SESSION_NAME: grafana
-  extraSecretMounts:
-    - name: aws-iam-token
-      readOnly: true
-      mountPath: /var/run/secrets/aws-iam-token/serviceaccount
-      projected:
-        defaultMode: 420
-        sources:
-        - serviceAccountToken:
-            audience: sts.amazonaws.com
-            expirationSeconds: 86400
-            path: token
-  sidecar:
-    dashboards:
-      enabled: true
-      searchNamespace: ALL
-    datasources:
-      defaultDatasourceEnabled: false
-  serviceAccount:
-    create: true
-    name: grafana
-    annotations:
-      iam.gke.io/gcp-service-account: grafana@coen-mahamed-ali.iam.gserviceaccount.com
-  deploymentStrategy:
-    type: Recreate # blame the PVC but this should be infrequent
-  persistence:
-    enabled: true
-    size: 50Gi
-  serviceMonitor:
-    enabled: true
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - name: Prometheus
-          type: prometheus
-          url: http://frontend.monitoring:9090
-          access: proxy
-          timeout: 120
-          isDefault: true
-  plugins:
-    - grafana-worldmap-panel
-    - grafana-piechart-panel
-    - grafana-polystat-panel
-    - grafana-x-ray-datasource
-    - grafana-athena-datasource
-  # extraSecretMounts:
-  #   - name: grafana-oauth
-  #     secretName: grafana-oauth
-  #     defaultMode: 0440
-  #     mountPath: /etc/secrets/oauth
-  #     readOnly: true
-  grafana.ini:
-    feature_toggles:
-      publicDashboards: "true"
-    server:
-      root_url: https://grafana.knative.dev
-    auth.github:
-      enabled: false
-      allow_sign_up: true
-      scopes: user:email,read:org
-      auth_url: https://github.com/login/oauth/authorize
-      token_url: https://github.com/login/oauth/access_token
-      api_url: https://api.github.com/user
-      # role_attribute_path: contains(groups[*], '@knative/productivity-wg-leads') && 'Admin' || contains(groups[*], '@knative/productivity-writers') && 'Editor' || 'Viewer'
-
 kube-prometheus-stack:
   # helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -f helm/prom-operator.yaml -n monitoring
+  grafana:
+    resources:
+    limits:
+      cpu: 4000m
+      memory: 2048Mi
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+    env:
+      AWS_ROLE_ARN: arn:aws:iam::691556712356:role/gke-grafana
+      AWS_WEB_IDENTITY_TOKEN_FILE: /var/run/secrets/aws-iam-token/serviceaccount/token
+      AWS_REGION: eu-central-1
+      AWS_ROLE_SESSION_NAME: grafana
+    extraSecretMounts:
+      - name: aws-iam-token
+        readOnly: true
+        mountPath: /var/run/secrets/aws-iam-token/serviceaccount
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              audience: sts.amazonaws.com
+              expirationSeconds: 86400
+              path: token
+    sidecar:
+      dashboards:
+        enabled: true
+        searchNamespace: ALL
+      datasources:
+        defaultDatasourceEnabled: false
+    serviceAccount:
+      create: true
+      name: grafana
+      annotations:
+        iam.gke.io/gcp-service-account: grafana@coen-mahamed-ali.iam.gserviceaccount.com
+    deploymentStrategy:
+      type: Recreate # blame the PVC but this should be infrequent
+    persistence:
+      enabled: true
+      size: 50Gi
+    serviceMonitor:
+      enabled: true
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Managed Prometheus
+            type: prometheus
+            url: http://frontend.monitoring:9090
+            access: proxy
+            timeout: 120
+            isDefault: false
+    plugins:
+      - grafana-worldmap-panel
+      - grafana-piechart-panel
+      - grafana-polystat-panel
+      - grafana-x-ray-datasource
+      - grafana-athena-datasource
+    grafana.ini:
+      feature_toggles:
+        publicDashboards: "true"
+      server:
+        root_url: https://grafana.knative.dev
+      auth.github:
+        enabled: false
+        allow_sign_up: true
+        scopes: user:email,read:org
+        auth_url: https://github.com/login/oauth/authorize
+        token_url: https://github.com/login/oauth/access_token
+        api_url: https://api.github.com/user
+
   manageCrds: true
   alertmanager:
     alertmanagerSpec:
