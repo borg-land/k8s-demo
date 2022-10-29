@@ -133,6 +133,8 @@ mimir-distributed:
   enabled: true
   mimir:
     structuredConfig:
+      limits:
+        max_global_series_per_user: 0
       common:
         storage:
           backend: gcs
