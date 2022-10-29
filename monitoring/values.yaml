@@ -118,8 +118,6 @@ kube-prometheus-stack:
           sidecar.istio.io/inject: "false"
     tls:
       enabled: false 
-  grafana:
-    enabled: false
   prometheus-node-exporter:
     hostNetwork: false
   coreDns:
@@ -141,6 +139,7 @@ mimir-distributed:
           gcs:
             bucket_name: coen-thanos
       blocks_storage:
+        backend: gcs
         storage_prefix: blocks
         bucket_store:
           chunks_cache:
