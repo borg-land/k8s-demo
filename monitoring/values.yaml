@@ -60,10 +60,6 @@ kube-prometheus-stack:
       - grafana-athena-datasource
     dashboards: 
       default:
-        mimir-config:
-          url: https://raw.githubusercontent.com/grafana/mimir/main/operations/mimir-mixin-compiled/dashboards/mimir-config.json
-        mimir-rollout:
-          url: https://raw.githubusercontent.com/grafana/mimir/main/operations/mimir-mixin-compiled/dashboards/mimir-rollout-progress.json
         istio-control-plane:
           gnetId: 7645
           revision: 139
@@ -80,7 +76,7 @@ kube-prometheus-stack:
       feature_toggles:
         publicDashboards: "true"
       server:
-        root_url: https://grafana.knative.dev
+        root_url: https://grafana.m.rack.gold
       auth.github:
         enabled: false
         allow_sign_up: true
