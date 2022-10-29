@@ -194,6 +194,8 @@ mimir-distributed:
         memory: 1.5Gi
 
   distributor:
+    persistentVolume:
+      size: 50Gi
     replicas: 2
     resources:
       limits:
