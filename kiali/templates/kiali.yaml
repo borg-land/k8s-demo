@@ -25,8 +25,10 @@ spec:
       url: 'https://grafana.m.rack.gold'
       in_cluster_url: 'http://monitoring-grafana.monitoring'
     prometheus:
-      url: 'http://monitoring-mimir-nginx.monitoring:80/prometheus'
-      health_check_url: "http://monitoring-mimir-nginx.monitoring:80/prometheus/api/v1/status/config"
+      url: http://monitoring-kube-prometheus-prometheus.monitoring:9090
+    # prometheus:
+    #   url: 'http://monitoring-mimir-nginx.monitoring:80/prometheus'
+    #   health_check_url: "http://monitoring-mimir-nginx.monitoring:80/prometheus/api/v1/status/config"
     # tracing:
     #   in_cluster_url: 'http://tracing-jaeger-query.tracing/jaeger'
     #   use_grpc: false    

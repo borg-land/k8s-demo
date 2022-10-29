@@ -142,10 +142,13 @@ mimir-distributed:
   enabled: true
   mimir:
     structuredConfig:
+      common:
+        storage:
+          backend: gcs
+          gcs:
+            bucket_name: coen-thanos
       blocks_storage:
-        backend: gcs
-        gcs:
-          bucket_name: coen-thanos
+        storage_prefix: blocks
         bucket_store:
           chunks_cache:
             backend: memcached
@@ -221,7 +224,7 @@ mimir-distributed:
     topologySpreadConstraints: {}
 
   minio:
-    enabled: false
+    enabled: true
 
   overrides_exporter:
     replicas: 1
