@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: titanic
+spec:
+  destination:
+    namespace: titanic
+    server: 'https://kubernetes.default.svc'
+  source:
+    helm:
+      releaseName: titanic
+      valueFiles:
+      - values.yaml
+    path: chart
+    repoURL: 'https://gitlab.com/upodroid/API-Exercise.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
