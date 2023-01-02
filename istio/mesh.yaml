@@ -1,8 +1,3 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: istio-system
----
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
@@ -15,7 +10,9 @@ spec:
     ingressGateways:
       - enabled: true
         k8s:
+          replicaCount: 3
           service:
+            loadBalancerIP: 34.147.113.28
             externalTrafficPolicy: Local
             ports:
               - name: status-port
@@ -38,11 +35,8 @@ spec:
                 port: 15443
                 protocol: TCP
                 targetPort: 15443
-              - name: mqtt
-                port: 1883
-                protocol: TCP
-              - name: syslog
-                port: 1514
+              - name: tcp-cqlsh
+                port: 9042
                 protocol: TCP
         name: istio-ingressgateway
       - enabled: true
@@ -64,6 +58,8 @@ spec:
         name: cluster-local-gateway
       - enabled: true
         k8s:
+          serviceAnnotations:
+            networking.gke.io/load-balancer-type: "Internal"
           env:
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
               value: network1
@@ -94,7 +90,7 @@ spec:
             memory: 2Gi
   hub: gcr.io/istio-release
   meshConfig:
-    accessLogFile: /dev/stdout
+    # accessLogFile: /dev/stdout
     enablePrometheusMerge: true
     protocolDetectionTimeout: 5s
     outboundTrafficPolicy: 
@@ -102,10 +98,10 @@ spec:
     enableTracing: true
     defaultConfig:
       gatewayTopology:
-        numTrustedProxies: 2  
+        numTrustedProxies: 2
   namespace: istio-system
   profile: default
-  tag: 1.15.0
+  tag: 1.16.1
   values:
     global:
       meshID: lab
