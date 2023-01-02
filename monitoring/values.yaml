@@ -161,7 +161,8 @@ mimir-distributed:
             memcached:
               addresses: 10.104.128.67:11211
               max_item_size: 1048576
-
+      querier:
+        max_outstanding_per_tenant: 1000
   serviceAccount:
     create: true
     name: mimir
