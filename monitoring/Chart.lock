@@ -1,9 +1,9 @@
 dependencies:
 - name: mimir-distributed
   repository: https://grafana.github.io/helm-charts
-  version: 4.0.0-weekly.209
+  version: 4.1.0-weekly.217
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
   version: 41.6.1
-digest: sha256:0d93762e9c05371bca183e9a13fbe17f62dca39061be8ea748cd8b40a702435a
-generated: "2022-10-29T18:07:42.958931+01:00"
+digest: sha256:cae8c64b9d79a0c368cea265c8afa07d12f9f138f5177df9412edf487b7034e0
+generated: "2023-01-03T13:33:05.099993Z"
